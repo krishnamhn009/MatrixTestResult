@@ -48,7 +48,14 @@ namespace MatrixTestResult
                             Max = 4,
                             Width = 8,
                             CustomWidth = true
-                        });
+                        },
+                         new Column // Is Working column
+                         {
+                             Min = 4,
+                             Max = 4,
+                             Width = 8,
+                             CustomWidth = true
+                         });
 
                 worksheetPart.Worksheet.AppendChild(columns);
 
@@ -71,7 +78,8 @@ namespace MatrixTestResult
                     ConstructCell("Id", CellValues.String, 2),
                     ConstructCell("Name", CellValues.String, 2),
                     ConstructCell("Birth Date", CellValues.String, 2),
-                    ConstructCell("Salary", CellValues.String, 2));
+                    ConstructCell("Salary", CellValues.String, 2),
+                    ConstructCell("IsWorking", CellValues.String, 2));
 
                 // Insert the header row to the Sheet Data
                 sheetData.AppendChild(row);
@@ -79,13 +87,15 @@ namespace MatrixTestResult
                 // Inserting each employee
                 foreach (var employee in employees)
                 {
-                    row = new Row();
-
+                    row = new Row();                    
                     row.Append(
                         ConstructCell(employee.Id.ToString(), CellValues.Number, 1),
                         ConstructCell(employee.Name, CellValues.String, 1),
                         ConstructCell(employee.DOB.ToString("yyyy/MM/dd"), CellValues.String, 1),
-                        ConstructCell(employee.Salary.ToString(), CellValues.Number, 1));
+                        ConstructCell(employee.Salary.ToString(), CellValues.Number, 1),
+                        ConstructCell(employee.IsWorking.ToString(), CellValues.String, (uint)(string.Equals(employee.IsWorking, "Yes", StringComparison.OrdinalIgnoreCase) ? 4 : 3)));
+
+                   
 
                     sheetData.AppendChild(row);
                 }
@@ -119,12 +129,15 @@ namespace MatrixTestResult
                     new Color() { Rgb = "FFFFFF" }
 
                 ));
-
-            Fills fills = new Fills(
+                        Fills fills = new Fills(
                     new Fill(new PatternFill() { PatternType = PatternValues.None }), // Index 0 - default
                     new Fill(new PatternFill() { PatternType = PatternValues.Gray125 }), // Index 1 - default
-                    new Fill(new PatternFill(new ForegroundColor { Rgb = new HexBinaryValue() { Value = "66666666" } })
-                    { PatternType = PatternValues.Solid }) // Index 2 - header
+                    new Fill(new PatternFill(new ForegroundColor { Rgb = new HexBinaryValue() { Value = "66666666" } })// Index 2 - header
+                     { PatternType = PatternValues.Solid }),
+                    new Fill(new PatternFill(new ForegroundColor { Rgb = "ff4d4d" }, new BackgroundColor() { Indexed = (UInt32Value)64U })
+                      { PatternType = PatternValues.Solid }), ////index 3--red color 
+                       new Fill(new PatternFill(new ForegroundColor { Rgb = "00b386" }, new BackgroundColor() { Indexed = (UInt32Value)64U })
+                       { PatternType = PatternValues.Solid })
                 );
 
             Borders borders = new Borders(
@@ -140,7 +153,9 @@ namespace MatrixTestResult
             CellFormats cellFormats = new CellFormats(
                     new CellFormat(), // default
                     new CellFormat { FontId = 0, FillId = 0, BorderId = 1, ApplyBorder = true }, // body
-                    new CellFormat { FontId = 1, FillId = 2, BorderId = 1, ApplyFill = true } // header
+                    new CellFormat { FontId = 1, FillId = 2, BorderId = 1, ApplyFill = true }, // header
+                    new CellFormat { FontId = 0, FillId = 3, BorderId = 1, ApplyFill = true },
+                    new CellFormat { FontId = 0, FillId = 4, BorderId = 1, ApplyFill = true }
                 );
 
             styleSheet = new Stylesheet(fonts, fills, borders, cellFormats);

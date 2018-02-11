@@ -13,6 +13,9 @@ namespace MatrixTestResult
             public string Name { get; set; }
             public DateTime DOB { get; set; }
             public decimal Salary { get; set; }
+
+        public string IsWorking 
+           { get { return Salary>0 ? "Yes" : "No"; } }
         }
 
         public sealed class Employees
@@ -47,7 +50,7 @@ namespace MatrixTestResult
                         Id = i,
                         Name = "Employee " + i,
                         DOB = new DateTime(1999, 1, 1).AddMonths(i),
-                        Salary = random.Next(100, 10000)
+                        Salary = i%2==0? random.Next(100, 10000):0
                     });
                 }
             }
